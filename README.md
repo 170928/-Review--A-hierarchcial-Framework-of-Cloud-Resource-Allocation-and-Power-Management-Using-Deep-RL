@@ -85,4 +85,23 @@ Predicted workload 와 curren workload 정보를 ㅎ뢀용하여, power manager�
 power manager는 RL 알고리즘을 통해서 job latency와 power consumption을 줄이기 위해 server를 ON / OFF 합니다.  
 
 ## [BACKGROUND OF THE AGENT-ENVIRONMENT INTERACTION SYSTEM AND CONTINUOUS-TIME Q-LEARNING]
-# Agent-Environment Interaction System
+### Agent-Environment Interaction System
+일반적인 agnet-environment model이 적용됩니다.  
+agent, environment 그리고 finite state space와 action 그리고 reward function으로 구성된 환경으로 이루어져 있습니다.  
+"decision maker"는 agent로 불립니다.  
+이 agent는 environmnet와 상호작용하면서 action을 취하고 그에따라 reward를 받으며 가지고 있는 정책 (policy)를 평가하고 업데이트 해나갑니다.  
+
+### Continous Time Q-Learning for Semi-Markov Decision Process (SMDP)
+![image](https://user-images.githubusercontent.com/40893452/45281107-bde87600-b511-11e8-8bef-f8456905b517.png)  
+agent는 다음과 같은 Q(s,a) 의 action-value function을 통해서 state s 에서 action a를 선택해 나아 갑니다.  
+이 과정에서 cumulated reward를 최대화 하는 policy를 학습하는 것이 agent의 목적입니다.  
+이 논문에서는 continuous-time system을 사용합니다.  
+Q-Learning for SMDP는 "online adaptive RL which operates in continous time domain" 알고리즘입니다.  
+이 알고리즘은 discrete-time domain에서의 Q-learning이 주기적으로 action-value function을 업데이트하는 것에서 오는 overhead를 줄일 수 있습니다.  
+Q-learning with SMDP 알고리즘은 다음과 같은 방법으로 Q value를 업데이트 합니다.  
+![image](https://user-images.githubusercontent.com/40893452/45281320-6dbde380-b512-11e8-877f-f95864a000eb.png)  
+![image](https://user-images.githubusercontent.com/40893452/45281459-d6a55b80-b512-11e8-926f-ec5899274f08.png)  
+
+## [SYSTEM MODEL AND PROBLEM STATEMENT]
+
+
