@@ -85,4 +85,4 @@ Predicted workload 와 curren workload 정보를 ㅎ뢀용하여, power manager�
 power manager는 RL 알고리즘을 통해서 job latency와 power consumption을 줄이기 위해 server를 ON / OFF 합니다.  
 
 ## [BACKGROUND OF THE AGENT-ENVIRONMENT INTERACTION SYSTEM AND CONTINUOUS-TIME Q-LEARNING]
-
+# Agent-Environment Interaction System
