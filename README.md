@@ -177,6 +177,60 @@ action space는 단순히 target server의 index가 됩니다.
 
 ### [State space]
 
+![image](https://user-images.githubusercontent.com/40893452/45287111-78807480-b522-11e8-8ffe-be5bd2c63076.png)  
 
+>(1) D 개의 type을 가진 자원  
+>(2) M 개의 물리적 서버가있는 서버 클러스터를 고려합니다.  
 
+### [Action space]
+Action space는 index of server for VM (job) allocation.  
+Action space 는 다음과 같이 정의됩니다.   
+![image](https://user-images.githubusercontent.com/40893452/45287305-e4fb7380-b522-11e8-9910-d86769817dc3.png)  
+(the same size as the total number of servers) 
 
+### [Reward]
+Profit (Revenue)는 모든 Job들을 처리하는데서 얻은 수익 과 소모된 총 에너지 비용 & reliability penalty의 차이입니다.  
+Job을 처리하는 것에 의해서 얻게되는 income은 "job latency"와 함께 감소합니다.  
+> waiting time in queue and processing time in the server   
+
+"power consumption, job latency, reliability issue"를 모두 동시에 고려하기 위해서, reward function r(t)는 다음과 같이 정의됩니다.  
+![image](https://user-images.githubusercontent.com/40893452/45287805-24768f80-b524-11e8-88a9-6d35749136e1.png)  
+
+사용된 세가지 값들은 다음과 같습니다.  
+(1) 총 전력 소비  
+(2) 시스템의 VM 수  
+(3) 안정성 목표 함수 값  
+그리고 위의 세가지 값들에 "negative weight" 가 곱해진 형태입니다.  
+
+"global tier"의 DRL agent는 위의 보상 함수를 기반으로 총 전력 소비, VM 대기 시간 및 안정성 메트릭의 선형 조합을 최적화합니다.  
+
+DQN의 학습과정에서 state의 크기로 인해 발생하는 training time의 문제를 해소하기 위해서,  
+autoencoder를 활용해서 lower-dimensional high level representation of server group state g(t_j)_k 
+를 만들어냅니다.  
+
+### [Sub-Qk]
+> 자세한 내용은 사진으로 대체합니다.  
+![image](https://user-images.githubusercontent.com/40893452/45288186-04939b80-b525-11e8-9c7a-83e324b00d72.png)  
+
+### [Weight Sharing]
+With weight sharing, any training samples can be used to train the Sub-Qk’s and autoencoders,  
+compared to the case without weight sharing, where only the training samples allocated to a server in Gk  
+can be used to train Sub-Qk.  
+가중치 공유를 통해서 G(k) 에서의 experience of RL agent를 다른 G(k)의 RL agent 학습에도 사용할 수 있다는 소리입니다.  
+
+![image](https://user-images.githubusercontent.com/40893452/45288677-35280500-b526-11e8-8245-25141d85d007.png)  
+
+## [THE LOCAL TIER OF THE HIERARCHICAL FRAMEWORK – RL-BASED POWER MANAGEMENT FOR SERVER]
+이전 section 에서는 global tier의 VM allocation RL agent에 대해서 다루었습니다.  
+이 section 에서는 local tier의 power management RL agent에 대해서 다룹니다.  
+
+![image](https://user-images.githubusercontent.com/40893452/45288832-9d76e680-b526-11e8-8c7b-c0fa40fe29e8.png)  
+
+### [LSTM based Worklad Predictor]
+local server를 power management를 위해서 ON/OFF 하며, average job latency를 줄이는 것이 agent의 목표가 됩니다.  
+local tier는 "workload predictor"가 존재하며 이는 LSTM을 기반으로 구성되어 있습니다.  
+
+workload predictor가 예측해야하는 workload는 VM resource allocation을 수행하는 "global tier"의 행동 결과에 따라서 정해집니다.  
+> local server가 갖게되는 workload는 global tier의 Job Broker가 allocation하는 방법에 따라 영향을 받기 떄문입니다.  
+
+### [Distributed Dynamic Power Management for Local Servers]
