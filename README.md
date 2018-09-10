@@ -234,3 +234,42 @@ workload predictor가 예측해야하는 workload는 VM resource allocation을 �
 > local server가 갖게되는 workload는 global tier의 Job Broker가 allocation하는 방법에 따라 영향을 받기 떄문입니다.  
 
 ### [Distributed Dynamic Power Management for Local Servers]
+![image](https://user-images.githubusercontent.com/40893452/45289935-4de5ea00-b529-11e8-87c8-f32b134f5c18.png)  
+job arrival time t(j+1) 에 대한 정보를 local tier는 알 수 없으므로, LSTM 기반의 Workload predictor가 제공해주는 추정 값을  
+사용합니다.  
+
+그러므로, power manager는 다음과 같은 정보들을 이용합니다. 즉, state parameter로 사용합니다.  
+![image](https://user-images.githubusercontent.com/40893452/45290017-8259a600-b529-11e8-9ff4-558e9af1c05b.png)  
+"decision epoch"라는 개념을 사용하며, 이 것은 decision을 결정하는것과 RL algorithm을 업데이트 하는 것을 의미합니다.  
+![image](https://user-images.githubusercontent.com/40893452/45290089-ac12cd00-b529-11e8-82ea-47582fdae2ab.png)  
+
+decision epoch 일때, power manager는 위의 1) 2) 3) 중의 하나의 해당하는 경우를 찾고 decision을 수행합니다.  
+각 경우에 따라서 다른 action을 수행하게 됩니다.  
+
+1) 의 경우, RL-based timeout policy를 따라서, action 을 수행합니다. 
+> time out value를 결정합니다.  
+
+2) 의 경우, new job을 수행합니다.   
+3) 의 경우, server를 active mode로 변환한뒤 new job을 수행합니다.  
+
+2) 와 3)의 경우 update는 필요하지 않습니다.  
+
+rewards는 다음과 같은 함수로써 표현된 것을 사용합니다.  
+![image](https://user-images.githubusercontent.com/40893452/45290366-61de1b80-b52a-11e8-9587-0dc2b8a0b2fe.png)  
+![image](https://user-images.githubusercontent.com/40893452/45290395-71f5fb00-b52a-11e8-9845-a001e51939b7.png)  
+
+버퍼링 된 서비스 요청 / 작업의 평균 수는 각 작업의 평균 대기 시간에 비례합니다.  
+이 평균 대기 시간은 생성 된 순간과 서버가 처리를 완료하는 순간 사이의 각 작업에 대한 평균 시간으로 정의됩니다.  
+
+그러므로, Q(s, a)의 action-value function은 the expected total discounted energy consumption and total
+latency experienced by all jobs 가 됩니다.  
+
+total number of jobs 와 total execution time은 고정되기 때문에 value function은 average power consumption과 average per-job latency의 linear combination의 값이 됩니다.  
+
+w 값은 power-latencty trade-off curve를 통해서 실험에 의해 결정하게 됩니다.  
+
+
+## [Review]
+1) power management의 RL agent가 결정하는 timeout-value는 continuous 임에도 Q(s, a)의 deterministic reinforcement learning으로 action을 결정하였습니다.  
+2) 각 RL agent의 reward function의 정교한 변형이 가능할 것으로 보입니다.  
+
