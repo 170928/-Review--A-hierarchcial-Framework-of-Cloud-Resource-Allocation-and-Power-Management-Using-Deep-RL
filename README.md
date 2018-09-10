@@ -47,4 +47,42 @@ state and action space 의 높은 차원 (high dimension)은 전통적인 RL 기
 
 결과적으로, 이전 연구에서는 단지 single physical server의 power 를 조절하거나, homogenous VM들을 제어하는 연구만이 이루어졌습니다.  
 
+Power consumption은 클라우드 컴퓨팅의 설계 및 제어에있어 중요한 요소 입니다.  
+높은 Power consumption는 시스템 안정성을 떨어 뜨리고 고성능 시스템의 냉각 비용을 증가시킵니다.  
+"idle" or "uunderutilized" 상태의 component들을 선택적으로 "shut-off"하거나 "slow-down" 하는 것과같은 Dynamic power management (DPM)은 power consumtion을 줄이는 효과적인 방법임이 입증되었습니다.  
+
+DPM (dynamic power management) 정책은 주로 "server level"에 적용되므로 VM 리소스 할당 결과에 따라 달라집니다.  
+따라서 전체 데이터 센터 또는 서버 클러스터를 대상으로하는 VM 자원 할당 및 전원 관리 프레임 워크는 전체 클라우드 컴퓨팅 시스템에 중요합니다.  
+
+> DQN 에 대한 간략한 설명이 써있는 부분은 생략하였습니다. github 의 다른 글을 참조해주세요.
+
+DRL ( 이 논문에서는 DQN을 다음과 같이 표기합니다 ) 프레임 워크는 상대적으로 low dimension을 필요로합니다.  
+각 결정 에포크에서 DRL 에이전트는 현재 상태에서 가능한 모든 동작을 열거하고 DNN을 사용하여 추론을 수행하여 최적의 Q (s, a) 값 추정을 유도해야하기 때문입니다.  
+그러므로, 클라우드 리소스 할당 및 전원 관리의 작업 공간이 크게 감소해야합니다.
+
+위의 목적을 달성하기 위해 본 논문에서는 클라우드 컴퓨팅 시스템에서 자원 배분 및 전력 관리 문제를 해결하기위한 새로운 계층 적 프레임 워크를 제안합니다.  
+제안 된 계층 적 프레임 워크는 다음과 같은 구성을 갖습니다.  
+(1) a global tier for VM resource allocation to the servers 
+(2) a local tier for power management of local servers.   
+
+제안 된 계층 적 프레임 워크는 향상된 확장 성을 갖습니다.  
+그리고, DQN을 위해서 reduced 된 action / state dimension 외에도 server의 local power management를 온라인 및 분산 방식으로 수행 할 수있게하여 병렬 처리를 더욱 향상시킵니다.  
+
+a global tier for VM resource allocation to the servers는 high dimension의 action / state space를 가지므로 DRL이 글로벌 티어 문제를 해결하기 위해 채택됩니다.  
+action space를 줄이기 위해 이 논문에서는 (1) continuous time" (2) event-driven decision framework를 채택합니다.  
+
+이때, action process에서의 action은 "target server" 를 나타내도록 합니다.  
+그리고, high dimension의 state space를 줄이기 위해서, "autoencoder"와 "weight sharing" 구조를 제안합니다.  
+
+"local tier"의 power management system은 다음과 같이 구성됩니다.  
+(1) workload 예측기  
+(2) power manager 
+
+workload predictor는 앞으로 생길 workload를 예측합니다.  
+이를 위해서 LSTM 을 사용합니다.  
+
+Predicted workload 와 curren workload 정보를 ㅎ뢀용하여, power manager는 model-free RL 알고리즘을 사용합니다.  
+power manager는 RL 알고리즘을 통해서 job latency와 power consumption을 줄이기 위해 server를 ON / OFF 합니다.  
+
+## [BACKGROUND OF THE AGENT-ENVIRONMENT INTERACTION SYSTEM AND CONTINUOUS-TIME Q-LEARNING]
 
