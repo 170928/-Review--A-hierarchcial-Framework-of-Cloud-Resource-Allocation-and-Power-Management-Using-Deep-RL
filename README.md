@@ -103,5 +103,46 @@ Q-learning with SMDP 알고리즘은 다음과 같은 방법으로 Q value를 �
 ![image](https://user-images.githubusercontent.com/40893452/45281459-d6a55b80-b512-11e8-926f-ec5899274f08.png)  
 
 ## [SYSTEM MODEL AND PROBLEM STATEMENT]
+![image](https://user-images.githubusercontent.com/40893452/45281496-f9377480-b512-11e8-8c52-ff3883d4b410.png)  
+본 논문에서는 클라우드 자원 할당 및 전원 관리 프레임 워크와 관련하여  
+(1) D 개의 type을 가진 자원  
+(2) M 개의 물리적 서버가있는 서버 클러스터를 고려합니다.  
+
+서버는 power management를 위해 active mode or sleep mode에있을 수 있습니다.  
+M을 물리적 서버 집합으로, D를 리소스 집합으로 나타냅니다.  
+
+제안 된 계층 구조 프레임 워크의 전역 계층에서 제어하는 작업 중개자는  
+도착시 클러스터의 서버 중 하나에 처리 리소스를 요청하는 작업을 전달합니다.  
+
+"Job broker"는 "global tier"에 의해서 조정됩니다.  
+Job broker는 resource를 할당 받기를 원하는 job에게 resource를 할당합니다.  
+
+각각의 server는 모든 할당된 job들을 queue에 입력합니다.   
+그리고 First-come-first-serve 방법에 따라서 resource를 할당합니다.   
+만약 server가 불충분한  resource를 가지고 있다면, 충분한 resource가 생길 때 까지 대기합니다.    
+그와 동시에, "local tier"가 power management를 수행하고 각각의 server를 On/Off 수행합니다.  
+이렇게 global tier와 local tier의 job-scheduling과 power management는 전체적인 server cluster들의 performance와 power consumption에 영향을 미칩니다.  
+
+
+![image](https://user-images.githubusercontent.com/40893452/45282096-ede54880-b514-11e8-92dc-b4e7a81becb6.png)    
+
+"job latency"는 job의 arrival time과 completion time 의 차로 정의됩니다.  
+위의 예시에서 latency로 보여주고 있습니다.  
+Job 3 의 t(6) - t(3) 의 latency는 job duration 보다 긴 latency를 가지고 있습니다.  
+그러므로, job broker는 scheduling 과정에서 하나의 server를 overload하게 만들면 안됩니다.  
+
+Job이 "sleep mode"의 server에게 할당되면, T(on) time을 거친 후에 server가 active mode로 전환됩니다.  
+유사하게, T(off) time을 거친 후에 server는 다시 "sleep mode"로 전환될 수 있습니다.  
+
+![image](https://user-images.githubusercontent.com/40893452/45285320-e37b7c80-b51d-11e8-9eb8-b78b7add6f6e.png)  
+위는 time t에서의 active mode인 server의 power consumption에 대한 수식입니다.  
+x(t)는 time t에서의 server의 CPU 사용률을 나타냅니다.  
+일반적으로, sleep mode에서 active mode로 전환하는데 사용되는 power consumption은 P(0%) 보다 큽니다.  
+
+
+
+
+
+
 
 
