@@ -139,6 +139,28 @@ Job이 "sleep mode"의 server에게 할당되면, T(on) time을 거친 후에 se
 x(t)는 time t에서의 server의 CPU 사용률을 나타냅니다.  
 일반적으로, sleep mode에서 active mode로 전환하는데 사용되는 power consumption은 P(0%) 보다 큽니다.  
 
+![image](https://user-images.githubusercontent.com/40893452/45285616-892eeb80-b51e-11e8-831a-789b86a0f2d2.png)  
+(a)는 ad-hoc mode에서의 예시입니다.  
+Job 1은 t(1)에 들어오며, Job 2는 t(3)에 들어옵니다.  
+이때, Job1이 끝나는 시간 t(2)이후에 sleep mode로 전환을 위해서 T(off) time이 강제적으로 수행 된 이후,
+t(3)에서 Job 2가 도착했음에도 sleep mode전환 이후 다시 T(on) time을 기다려 active mode전환 이후 Job 2가 할당됩니다.
+
+반면, (b)는 dynamic power management 기법이 활용되어,  
+Job 2 가 도착한 t(3)에 따라서 sleep mode 전환을 하지 않고 바로 Job 2를  할당하는 것으로  
+최종 실행 완료시간이 훨씬 짧아지며, 이를 통해서 mode 전환 power consumption 등을 아껴 효율적으로 이루어집니다.  
+
+이러한 작동은 power management를 수행하는 "local tier"에서 일어납니다.  
+local tie의 효과적인 DPM 기술은 "global tier"의 VM 할당 결과를 기반으로  합니다.  
+그러므로, 온라인 적응 방식으로 가장 바람직한 "time out" 값을 적절하게 결정하는 것이 필요합니다.  
+
+> (b)에서 time out 값 이내에 Job 2 가 t(3)에서 도착하였기 때문에, sleep mode 전환이 이루어지지 않았습니다.  
+
+workload predictor는 power management가 미래에 올 workload를 예측할 수 있게 해줍니다.  
+대기열 (queue) 에있는 보류중인 작업의 수와 같은 "current information"들을 사용해서이루어진 예측 결과는 power management에 전달되고 시스템의 관측 영역에서 해당 조치 및 학습을 선택하기위한 전원 관리자의 상태로 제공됩니다.  
+
+power management는 서버의 전력 소비 및 작업 대기 시간을 동시에 줄이는 데 도움이되는 가장 적절한 작업 (시간 초과 값)을 유도해야하며 model-free RL 기술은 적응 형 전원 관리 알고리즘이 됩니다.  
+
+## [OVERVIEW OF DEEP REINFORCEMENT LEARNING]
 
 
 
