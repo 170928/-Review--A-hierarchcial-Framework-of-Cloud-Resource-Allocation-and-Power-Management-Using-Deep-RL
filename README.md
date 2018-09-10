@@ -162,8 +162,20 @@ power management는 서버의 전력 소비 및 작업 대기 시간을 동시�
 
 ## [OVERVIEW OF DEEP REINFORCEMENT LEARNING]
 
+![image](https://user-images.githubusercontent.com/40893452/45286169-0d35a300-b520-11e8-84b2-a60ad1f2ab3e.png)  
 
+> DQN 에 대한 일반적인 내용을 설명하는 section이므로 github의 DQN 글을 참조해주세요.
 
+## [THE GLOBAL TIER OF THE HIERARCHICAL FRAMEWORK – DRL-BASED CLOUD RESOURCE ALLOCATION]
+
+"global tier"는 DQN 을 활용해서 high-dimension의 state space를 이용하여 VM resource allocation을 수행합니다.  
+그와 동시에 action space를 줄기이 위해서, continuous time domain & event-driven dicision 을 사용합니다.  
+action space는 단순히 target server의 index가 됩니다.  
+그러므로, continuous-time Q-learning for SMDP 알고리즘이 이 논문에서 제시하는 프레임워크의 기반 알고리즘이 됩니다.  
+
+"global tier"의 resource allocation은 "Job broker"가 수행하며 Job broker는 DRL algrotihm을 기반으로 작업을 수행합니다.  
+
+### [State space]
 
 
 
