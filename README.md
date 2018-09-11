@@ -270,8 +270,10 @@ w 값은 power-latencty trade-off curve를 통해서 실험에 의해 결정하�
 
 
 ## [Review]
-1) power management의 RL agent가 결정하는 timeout-value는 continuous 임에도 Q(s, a)의 deterministic reinforcement learning으로 action을 결정하였습니다.  
+1) power management의 RL agent가 결정하는 timeout-value는 continuous 임에도 Q(s, a)의 deterministic reinforcement learning으로 action을 결정하였습니다.
 2) 각 RL agent의 reward function의 정교한 변형이 가능할 것으로 보입니다.  
+=> 실제로 할당한 일이 완료 되었을 때, latency 와 함께 적용되는 reward 를 계산하는 것이 합당해 보입니다.
+=> 이 과정에서 sparse reward현상이 발생하게 될 수도 있으며 이에 대한 해결방법이 필요해 보입니다.
 3) weight sharing이라는 기법은 단순히 각각의 local tier가 하나의 weight 즉, policy에 따라 작동하도록 하는 것이므로 설명과 달리 일반적인 A3C 에서도 사용하는 기법입니다.  오히려 A3C 와 같이 실시간으로 계속 업데이트하는 와중에 centralized computer가 주기적으로 weight를 업데이트 받고 공유하는 분산 방식의 업데이트 기법을 활용하는 것에 대한 고려가 필요하다고 생각됩니다.  
 
 
